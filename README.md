@@ -4,9 +4,9 @@
 
 
 ## 📖 Project Overview
-This project analyzes a simulated **entertainment streaming platform** dataset using **pure SQL**.  
-It focuses on user engagement, content performance, and revenue trends — the kind of insights real streaming companies (like Netflix, Spotify, or Showmax) rely on for decision-making.
+The Entertainment Streaming Analytics (SQL Project) focuses on analyzing data from a fictional entertainment streaming platform to uncover key insights about user behavior, content performance, and subscription trends.
 
+As streaming platforms continue to dominate the entertainment industry, understanding how users interact with content is vital for improving engagement, retention, and profitability. This project demonstrates how SQL can be used to transform raw streaming data into actionable insights that support data-driven business decisions.
 All analysis was performed **entirely in SQL**, without using visualization tools.
 
 ---
