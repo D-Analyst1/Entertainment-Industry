@@ -1,0 +1,333 @@
+CREATE DATABASE Streaming
+
+-- =============================================
+-- Streaming Platform Analytics Project
+-- By: Onwuka Chukwuma
+-- =============================================
+
+-- Drop tables if they already exist (for re-runs)
+DROP TABLE IF EXISTS Payments, Ratings, Streams, Content, Users;
+
+-- ======================
+-- 1️⃣ USERS TABLE
+-- ======================
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Gender VARCHAR(10),
+    Age INT,
+    Country VARCHAR(50),
+    JoinDate DATE,
+    SubscriptionType VARCHAR(20)
+);
+
+INSERT INTO Users VALUES
+(1, 'John Doe', 'Male', 29, 'Nigeria', '2023-03-15', 'Premium'),
+(2, 'Mary Smith', 'Female', 22, 'Ghana', '2023-06-10', 'Free'),
+(3, 'Ali Hassan', 'Male', 35, 'Kenya', '2022-12-01', 'Family'),
+(4, 'Grace Adams', 'Female', 27, 'South Africa', '2023-01-20', 'Premium'),
+(5, 'David Johnson', 'Male', 31, 'Nigeria', '2023-07-02', 'Student'),
+(6, 'Sophia Lee', 'Female', 25, 'UK', '2022-09-11', 'Premium'),
+(7, 'James Carter', 'Male', 40, 'USA', '2022-11-28', 'Family'),
+(8, 'Fatima Bello', 'Female', 33, 'Nigeria', '2023-03-10', 'Free'),
+(9, 'Michael Wang', 'Male', 28, 'China', '2023-04-05', 'Premium'),
+(10, 'Sarah Brown', 'Female', 30, 'Canada', '2022-08-15', 'Premium');
+
+-- ======================
+-- 2️⃣ CONTENT TABLE
+-- ======================
+CREATE TABLE Content (
+    ContentID INT PRIMARY KEY,
+    Title VARCHAR(100),
+    Category VARCHAR(20),
+    Genre VARCHAR(30),
+    ReleaseYear INT,
+    Duration INT,
+    ArtistOrDirector VARCHAR(50)
+);
+
+INSERT INTO Content VALUES
+(101, 'Lost in Lagos', 'Movie', 'Drama', 2023, 120, 'Kunle Afolayan'),
+(102, 'Midnight Groove', 'Music', 'Afrobeat', 2022, 4, 'Burna Boy'),
+(103, 'Code City', 'Series', 'Tech Thriller', 2023, 45, 'Nollywood Studios'),
+(104, 'Desert Beats', 'Music', 'Pop', 2021, 3, 'Tems'),
+(105, 'Iron Streets', 'Movie', 'Action', 2022, 140, 'Femi Jacobs'),
+(106, 'Soft Life', 'Music', 'R&B', 2023, 4, 'Ayra Starr'),
+(107, 'The Data Analyst', 'Movie', 'Documentary', 2023, 90, 'BBC Africa'),
+(108, 'Heartbeat', 'Music', 'Hip-Hop', 2022, 3, 'Vector'),
+(109, 'The Empire Within', 'Series', 'Drama', 2021, 50, 'Netflix Originals'),
+(110, 'Energy Flow', 'Music', 'Dance', 2023, 5, 'Davido');
+
+-- ======================
+-- 3️⃣ STREAMS TABLE
+-- ======================
+CREATE TABLE Streams (
+    StreamID INT PRIMARY KEY,
+    UserID INT,
+    ContentID INT,
+    StreamDate DATE,
+    WatchTime INT,
+    Device VARCHAR(20),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (ContentID) REFERENCES Content(ContentID)
+);
+
+INSERT INTO Streams VALUES
+(1001, 1, 101, '2024-06-01', 110, 'TV'),
+(1002, 1, 102, '2024-06-03', 5, 'Mobile'),
+(1003, 2, 105, '2024-06-05', 130, 'PC'),
+(1004, 3, 109, '2024-06-08', 45, 'TV'),
+(1005, 4, 106, '2024-06-10', 4, 'Mobile'),
+(1006, 5, 107, '2024-06-12', 85, 'Tablet'),
+(1007, 6, 103, '2024-06-14', 48, 'Mobile'),
+(1008, 7, 108, '2024-06-17', 3, 'PC'),
+(1009, 8, 104, '2024-06-18', 3, 'Mobile'),
+(1010, 9, 101, '2024-06-20', 115, 'TV'),
+(1011, 10, 110, '2024-06-22', 5, 'Mobile'),
+(1012, 2, 102, '2024-07-01', 4, 'Tablet'),
+(1013, 4, 109, '2024-07-03', 50, 'TV'),
+(1014, 6, 108, '2024-07-05', 4, 'Mobile'),
+(1015, 7, 105, '2024-07-07', 130, 'TV');
+
+-- ======================
+-- 4️⃣ RATINGS TABLE
+-- ======================
+CREATE TABLE Ratings (
+    RatingID INT PRIMARY KEY,
+    UserID INT,
+    ContentID INT,
+    Rating DECIMAL(2,1),
+    ReviewDate DATE,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (ContentID) REFERENCES Content(ContentID)
+);
+
+INSERT INTO Ratings VALUES
+(201, 1, 101, 4.5, '2024-06-02'),
+(202, 2, 105, 4.2, '2024-06-06'),
+(203, 3, 109, 3.8, '2024-06-09'),
+(204, 4, 106, 4.9, '2024-06-11'),
+(205, 5, 107, 4.3, '2024-06-13'),
+(206, 6, 103, 4.0, '2024-06-15'),
+(207, 7, 108, 3.7, '2024-06-18'),
+(208, 8, 104, 4.5, '2024-06-19'),
+(209, 9, 101, 4.7, '2024-06-21'),
+(210, 10, 110, 4.6, '2024-06-23');
+
+-- ======================
+-- 5️⃣ PAYMENTS TABLE
+-- ======================
+CREATE TABLE Payments (
+    PaymentID INT PRIMARY KEY,
+    UserID INT,
+    Amount DECIMAL(10,2),
+    PaymentDate DATE,
+    PaymentMethod VARCHAR(20),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+INSERT INTO Payments VALUES
+(301, 1, 15.99, '2024-06-01', 'Card'),
+(302, 4, 15.99, '2024-06-05', 'PayPal'),
+(303, 5, 7.99, '2024-06-06', 'Card'),
+(304, 6, 15.99, '2024-06-10', 'Bank Transfer'),
+(305, 7, 22.99, '2024-06-11', 'Card'),
+(306, 9, 15.99, '2024-06-13', 'Card'),
+(307, 10, 15.99, '2024-06-14', 'PayPal');
+
+
+SELECT * 
+FROM Users
+
+SELECT *
+FROM Content
+
+--SELECT *
+--FROM Streams
+
+SELECT *
+FROM Ratings
+
+SELECT *
+FROM payments
+
+---MANIPULATION
+--USERS
+ALTER TABLE Users
+ADD Year_Joined INT
+
+UPDATE Users
+SET Year_Joined = YEAR(JoinDate);
+
+ALTER TABLE Users
+DROP COLUMN Year
+
+ALTER TABLE Users
+ADD Month VARCHAR(20);
+
+UPDATE Users
+SET Month = DATENAME(month, JoinDate);
+
+SELECT * 
+FROM Users
+
+---STREAM
+ALTER TABLE Streams
+ADD Year_Streamed INT
+
+UPDATE Streams
+SET Year_Streamed = YEAR(StreamDate);
+
+ALTER TABLE Streams
+ADD Month VARCHAR(20);
+
+UPDATE Streams
+SET Month = DATENAME(month, StreamDate);
+
+SELECT * 
+FROM Streams
+
+---Ratings
+SELECT *
+FROM Ratings
+
+ALTER TABLE Ratings
+ADD Review_year INT
+
+UPDATE Ratings
+SET Review_year= YEAR(ReviewDate);
+
+ALTER TABLE Ratings
+ADD Month VARCHAR(20);
+
+UPDATE Ratings
+SET Month = DATENAME(month, ReviewDate);
+
+ALTER TABLE Ratings
+ADD Rating_scoreView VARCHAR(20);
+
+UPDATE Ratings
+SET Rating_scoreView  = CASE 
+    WHEN Rating > 4 THEN 'Excellent'
+    ELSE 'Average'
+END;
+
+---payments
+SELECT *
+FROM payments
+
+ALTER TABLE payments
+ADD Year_of_Payement INT
+
+UPDATE payments
+SET Year_of_Payement= YEAR(PaymentDate);
+
+ALTER TABLE payments
+ADD Month VARCHAR(20);
+
+UPDATE payments
+SET Month = DATENAME(month, PaymentDate);
+
+---ANALYSIS 
+----Most Active Users (Top Binge Watchers)
+SELECT 
+    u.Name,
+    u.Country,
+    u.SubscriptionType,
+    SUM(s.WatchTime) AS TotalWatchTime
+FROM Streams s
+JOIN Users u ON s.UserID = u.UserID
+GROUP BY u.Name, u.Country, u.SubscriptionType
+ORDER BY TotalWatchTime DESC;
+
+--Top Performing Content (by Total Streams & Watch Time)
+SELECT 
+    c.Title,
+    c.Category,
+    c.Genre,
+    COUNT(s.StreamID) AS TotalStreams,
+    SUM(s.WatchTime) AS TotalWatchTime
+FROM Content c
+JOIN Streams s ON c.ContentID = s.ContentID
+GROUP BY c.Title, c.Category, c.Genre
+ORDER BY TotalStreams DESC, TotalWatchTime DESC;
+
+SELECT *
+FROM Streams
+
+---Revenue by Subscription Type
+SELECT 
+    u.SubscriptionType,
+    COUNT(p.PaymentID) AS TotalPayments,
+    SUM(p.Amount) AS TotalRevenue,
+    ROUND(AVG(p.Amount), 2) AS AvgPayment
+FROM Payments p
+JOIN Users u ON p.UserID = u.UserID
+GROUP BY u.SubscriptionType
+ORDER BY TotalRevenue DESC;
+
+---Active Users by Country
+SELECT 
+    u.Country,
+    COUNT(DISTINCT s.UserID) AS ActiveUsers,
+    SUM(s.WatchTime) AS TotalWatchTime
+FROM Streams s
+JOIN Users u ON s.UserID = u.UserID
+GROUP BY u.Country
+ORDER BY ActiveUsers DESC;
+
+--Streaming Trends Over Time (Monthly Watch Growth)
+SELECT 
+    Month,
+    COUNT(StreamID) AS TotalStreams,
+    SUM(WatchTime) AS TotalWatchTime
+FROM Streams
+GROUP BY Month
+
+--Highest Rated Content
+SELECT 
+    c.Title,
+    c.Category,
+    c.Genre,
+    ROUND(AVG(r.Rating), 3) AS AvgRating,
+    COUNT(r.RatingID) AS RatingCount
+FROM Ratings r
+JOIN Content c ON r.ContentID = c.ContentID
+GROUP BY c.Title, c.Category, c.Genre
+HAVING COUNT(r.RatingID) >= 2
+ORDER BY AvgRating DESC;
+
+--Comparing Premium vs Free Users’ Engagement
+SELECT 
+    u.SubscriptionType,
+    COUNT(DISTINCT s.UserID) AS UserCount,
+    ROUND(AVG(s.WatchTime), 2) AS AvgWatchTime,
+    SUM(s.WatchTime) AS TotalWatchTime
+FROM Streams s
+JOIN Users u ON s.UserID = u.UserID
+GROUP BY u.SubscriptionType
+ORDER BY AvgWatchTime DESC;
+
+--Genre Popularity Ranking
+SELECT 
+    c.Genre,
+    COUNT(s.StreamID) AS TotalStreams,
+    SUM(s.WatchTime) AS TotalWatchTime,
+    RANK() OVER (ORDER BY COUNT(s.StreamID) DESC) AS PopularityRank
+FROM Content c
+JOIN Streams s ON c.ContentID = s.ContentID
+GROUP BY c.Genre
+ORDER BY PopularityRank;
+
+--identify Inactive or At-Risk Users
+SELECT 
+    u.UserID,
+    u.Name,
+    u.SubscriptionType,
+    MAX(s.StreamDate) AS LastStreamDate,
+    DATEDIFF(DAY, MAX(s.StreamDate), GETDATE()) AS DaysSinceLastStream
+FROM Users u
+LEFT JOIN Streams s ON u.UserID = s.UserID
+GROUP BY u.UserID, u.Name, u.SubscriptionType
+HAVING DATEDIFF(DAY, MAX(s.StreamDate), GETDATE()) > 30
+ORDER BY DaysSinceLastStream DESC;
